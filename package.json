@@ -14,7 +14,6 @@
     "@babel/preset-env": "^7.19.4",
     "@optimize-lodash/rollup-plugin": "^4.0.3",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
-    "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3",
     "chai": "^4.3.6",
     "eslint": "^8.26.0",
     "jquery": "^3.3.0",
@@ -27,27 +26,36 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.4",
     "rollup-watch": "^4.3.1",
+    "rollup-plugin-node-externals": "^6.1.1",
     "sinon": "^14.0.1",
     "sinon-chai": "^3.0.0",
     "typescript": "^4.9.4"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "BABEL_ENV=legacy rollup -c",
+    "build-es": "ESM=true BABEL_ENV=esm rollup -c && ./esm-postbuild.sh",
     "docs": "./node_modules/jsdoc/jsdoc.js -c jsdoc.config.js",
     "test": "mocha test --recursive",
     "watch": "rollup -c -w",
     "setup": "cp hooks/pre-commit .git/hooks/pre-commit",
     "lint": "eslint test src *.js",
-    "deploy": "npm run docs && DIST=1 rollup -c && DIST=1 MIN=1 rollup -c"
+    "deploy": "npm run docs && DIST=1 yarn build && DIST=1 MIN=1 yarn build && yarn build-es"
   },
   "main": "dist/inspire-tree.js",
   "types": "./inspire-tree.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/inspire-tree.js",
+      "require": "./dist/inspire-tree.js",
+      "types": "./inspire-tree.d.ts"
+    }
+  },
   "files": [
-    "dist",
-    "src",
-    "*.json",
-    "*.ts",
-    "LICENSE",
-    "README.md"
-  ]
+   "dist",
+   "src",
+   "*.json",
+   "*.ts",
+   "LICENSE",
+   "README.md"
+ ]
 }

@@ -1,10 +1,18 @@
 {
-    "presets": ["@babel/preset-env"],
     "plugins": [
-        "babel-plugin-transform-object-rest-spread",
         ["babel-plugin-transform-builtin-extend", {
             "globals": ["Array"],
             "approximate": true
         }]
-    ]
+    ],
+    "env": {
+        "esm": {
+            "presets": [["@babel/preset-env", {
+                "targets": ">0.3%, last 2 versions, not IE <= 11, not dead"
+            }]]
+        },
+        "legacy": {
+            "presets": ["@babel/preset-env"]
+        }
+    }
 }
